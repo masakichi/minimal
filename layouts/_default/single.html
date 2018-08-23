@@ -5,6 +5,7 @@
     {{ partial "list-item" . }}
 
     <br> <div class="text-justify">{{ .Content }}</div>
+    <br> <div class="text-justify">Last Update: {{ .Lastmod.Format "January 2, 2006" }}{{ with .GitInfo }}: <a href="{{$.Site.Params.ghrepo}}/commit/{{ .Hash }}">{{ .Subject }} ({{ .AbbreviatedHash }})</a>{{ end }}</div>
 
     <!-- related posts with the same tags -->
     {{ $related := first 3 (where (where (where .Site.Pages.ByDate.Reverse ".Type" "==" "post") ".Params.tags" "intersect" .Params.tags) "Permalink" "!=" .Permalink) }}
