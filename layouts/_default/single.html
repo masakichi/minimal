@@ -2,19 +2,25 @@
 
 <main>
 
-    {{ partial "list-item" . }}
+    <h1>{{ .Title }}</h4>
+    <p>{{ .Date.Format (.Site.Params.dateFormat | default "January 2, 2006") }}</p>
+    {{ range .Params.tags }}
+    <a href="{{ $.Site.BaseURL }}tags/{{ . | urlize }}"><kbd class="item-tag">{{ . }}</kbd></a>
+    {{ end }}
 
     <br> <div class="text-justify">{{ .Content }}</div>
-    <br> <div class="text-justify">Last Update: {{ .Lastmod.Format "January 2, 2006" }}{{ with .GitInfo }}: <a href="{{$.Site.Params.ghrepo}}/commit/{{ .Hash }}">{{ .Subject }} ({{ .AbbreviatedHash }})</a>{{ end }}</div>
+    <br> <div class="text-justify">最近修改 {{ .Lastmod.Format (.Site.Params.dateFormat | default "January 2, 2006") }}{{ with .GitInfo }}: <a href="{{$.Site.Params.ghrepo}}/commit/{{ .Hash }}">{{ .Subject }} ({{ .AbbreviatedHash }})</a>{{ end }}</div>
 
-    <!-- related posts with the same tags -->
-    {{ $related := first 3 (where (where (where .Site.Pages.ByDate.Reverse ".Type" "==" "post") ".Params.tags" "intersect" .Params.tags) "Permalink" "!=" .Permalink) }}
+    {{ $related := .Site.RegularPages.Related . | first 5 }}
 
     {{ if $related }}
 
-        <h4 class="page-header">Related</h4>
-
-        {{ range $related }} {{ partial "list-item" . }} {{ end }}
+        <div class="text-justify">
+            <h2>相关推荐</h2>
+            {{ range $related }}
+            <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+            {{ end }}
+        </div>
 
     {{ end }}
 
