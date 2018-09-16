@@ -2,35 +2,43 @@
 
 <main>
 
-    <h1>{{ .Title }}</h4>
-    <p>{{ .Date.Format (.Site.Params.dateFormat | default "January 2, 2006") }}</p>
-    {{ range .Params.tags }}
-    <a href="{{ $.Site.BaseURL }}tags/{{ . | urlize }}"><kbd class="item-tag">{{ . }}</kbd></a>
-    {{ end }}
-
-    <br> <div class="text-justify">{{ .Content }}</div>
-    <br> <div class="text-justify">最近修改 {{ .Lastmod.Format (.Site.Params.dateFormat | default "January 2, 2006") }}{{ with .GitInfo }}: <a href="{{$.Site.Params.ghrepo}}/commit/{{ .Hash }}">{{ .Subject }} ({{ .AbbreviatedHash }})</a>{{ end }}</div>
-
-    {{ $related := .Site.RegularPages.Related . | first 5 }}
-
-    {{ if $related }}
-
-        <div class="text-justify">
-            <h2>相关推荐</h2>
-            {{ range $related }}
-            <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+    <article>
+        <div class="article-header">
+            <div class="article-header-date">{{ .Date.Format (.Site.Params.dateFormat | default "January 2, 2006") }}</div>
+        {{ if .Params.tags }}
+            <div class="article-header-tags">
+            {{ range .Params.tags }}
+            <a href="{{ $.Site.BaseURL }}tags/{{ . | urlize }}"><span class="label label-default">{{ . }}</span></a>
             {{ end }}
+            </div>
+        {{ end }}
         </div>
+        <h1>{{ .Title }}</h4>
 
-    {{ end }}
+        <br> <div class="text-justify">{{ .Content }}</div>
+        <br> <div class="text-justify">最近修改 {{ .Lastmod.Format (.Site.Params.dateFormat | default "January 2, 2006") }}{{ with .GitInfo }}: <a href="{{$.Site.Params.ghrepo}}/commit/{{ .Hash }}">{{ .Subject }} ({{ .AbbreviatedHash }})</a>{{ end }}</div>
 
-    {{ if and .Site.DisqusShortname (not .Params.disableComments) }}
+        {{ $related := .Site.RegularPages.Related . | first 5 }}
 
-        <h4 class="page-header">Comments</h4>
+        {{ if $related }}
 
-        {{ template "_internal/disqus.html" . }}
+            <div class="text-justify">
+                <h2>相关推荐</h2>
+                {{ range $related }}
+                <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+                {{ end }}
+            </div>
 
-    {{ end }}
+        {{ end }}
+
+        {{ if and .Site.DisqusShortname (not .Params.disableComments) }}
+
+            <h4 class="page-header">Comments</h4>
+
+            {{ template "_internal/disqus.html" . }}
+
+        {{ end }}
+    </article>
 
 </main>
 
