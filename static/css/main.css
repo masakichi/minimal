@@ -146,8 +146,18 @@ article {
     border-bottom: 2px solid #ddd;
 }
 
+.article-header-date a {
+    text-decoration: none;
+    color: #aaa;
+}
+
 .article-header-tags {
     float: right;
+}
+
+.article-create-date {
+    float: right;
+    color: #aaa;
 }
 
 article h1 {

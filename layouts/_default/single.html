@@ -4,7 +4,11 @@
 
     <article class="text-justify">
         <div class="article-header">
-            <div class="article-header-date">{{ .Date.Format (.Site.Params.dateFormat | default "January 2, 2006") }} <i class="fa fa-history"></i></div>
+                {{ if .GitInfo }}
+                <div class="article-header-date">
+                    <a href="{{ .Site.Params.ghrepo }}/commit/{{ .GitInfo.Hash }}" title="{{ .GitInfo.Subject }}">{{ .Lastmod.Format (.Site.Params.dateFormat | default "January 2, 2006") }} 修订
+                </div>
+                {{ end }}
         {{ if .Params.tags }}
             <div class="article-header-tags hidden-xs">
             {{ range .Params.tags }}
@@ -17,7 +21,9 @@
 
         {{ .Content }}
 
-        最近修改 {{ .Lastmod.Format (.Site.Params.dateFormat | default "January 2, 2006") }}{{ with .GitInfo }}: <a href="{{$.Site.Params.ghrepo}}/commit/{{ .Hash }}">{{ .Subject }} ({{ .AbbreviatedHash }})</a>{{ end }}
+        <div class="article-create-date">
+            发表于 {{ .Date.Format (.Site.Params.dateFormat | default "January 2, 2006") }}
+        </div>
 
         {{ $related := .Site.RegularPages.Related . | first 5 }}
 
